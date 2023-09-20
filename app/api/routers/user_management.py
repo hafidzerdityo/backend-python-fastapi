@@ -4,11 +4,13 @@ import api.schemas.user_management as schemas
 import services.user_management as services_user
 import services.utils as utils
 from repositories.postgres.config.database_config import database
+import repositories.postgres.config.db_model as db_model
+
 from log.log import logger
 
 router = APIRouter()
 
-user_service = services_user.UserService(database,logger)
+user_service = services_user.init_service_user(database,db_model,logger)
 
 @router.post('/user', tags=["User Management"], status_code=status.HTTP_201_CREATED, response_model=schemas.ResponseDaftar)
 async def create_user(request_payload: schemas.RequestDaftar) -> schemas.ResponseDaftar:

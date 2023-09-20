@@ -6,6 +6,7 @@ import services.utils as utils
 from log.log import logger
 from datetime import datetime, timedelta
 from repositories.postgres.config.database_config import database
+import repositories.postgres.config.db_model as db_model
 
 
 router = APIRouter()
@@ -13,7 +14,7 @@ router = APIRouter()
 active_tokens = {}
 revoked_tokens = set()
 
-user_service = services_auth.AuthService(database, logger)
+user_service = services_auth.init_service_auth(database, db_model, logger)
 
 
 
