@@ -9,6 +9,27 @@ class RepositoryUser:
         self.db_model = db_model
         self.database = database
         self.logger = logger
+
+    # # RAW Query Example
+    # async def check_user(self, username: str):
+    #     try:
+    #         query = f"""
+    #             SELECT username, nama, role, divisi, jabatan, created_at, is_deleted
+    #             FROM "user"
+    #             WHERE username = :username
+    #         """
+    #         user_exist = await self.database.fetch_one(query=query, values={"username": username})
+            
+    #         if user_exist:
+    #             user_exist = dict(user_exist)
+    #             user_exist['created_at'] = user_exist['created_at'].strftime("%Y-%m-%d %H:%M:%S.%f")
+    #         else:
+    #             user_exist = {}
+    #         return user_exist
+    #     except Exception as e:
+    #         remark = 'Database Crud Error'
+    #         self.logger.error(str(e))
+    #         raise Exception(remark)
         
     async def check_user(self, username: str):
         try:
