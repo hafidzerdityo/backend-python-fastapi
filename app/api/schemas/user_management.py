@@ -46,4 +46,8 @@ class ResponseUser(BaseModel):
     resp_msg: StrictStr
     resp_data: ResponseUserItem
 
+class ResponseUsers(BaseModel):
+    resp_msg: StrictStr
+    resp_data: List[ResponseUserItem]
+
 

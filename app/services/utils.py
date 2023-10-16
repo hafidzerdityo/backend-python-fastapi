@@ -15,7 +15,7 @@ load_dotenv('auth.env')
 # ============ START OF AUTH UTILS ============ #
 SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 1
+ACCESS_TOKEN_EXPIRE_MINUTES = 15
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")

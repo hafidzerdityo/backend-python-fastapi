@@ -10,6 +10,31 @@ class RepositoryUser:
         self.database = database
         self.logger = logger
 
+    async def create_user(self, req_payload:dict) -> dict:
+        try:
+            query = self.db_model.User.insert().values(
+                username = req_payload.get('username'),
+                hashed_password = utils.get_password_hash(req_payload.get('password')),
+                nama = req_payload.get('nama'),
+                role = req_payload.get('role'),
+                divisi = req_payload.get('divisi'),
+                jabatan = req_payload.get('jabatan'),
+                created_at = crud_utils.current_datetime(),
+                updated_at = None,
+                is_deleted = False
+            )
+            await self.database.execute(query)
+            return {
+                'success' : True
+            }
+               
+            
+        except Exception as e:
+            remark = 'Database Crud Error'
+            self.logger.error(str(e))
+            raise Exception(remark)
+
+
     # # RAW Query Example
     # async def check_user(self, username: str):
     #     try:
@@ -31,7 +56,7 @@ class RepositoryUser:
     #         self.logger.error(str(e))
     #         raise Exception(remark)
         
-    async def check_user(self, username: str):
+    async def get_user(self, username: str) -> dict:
         try:
             query = self.db_model.User.select().where(
                 (self.db_model.User.c.username == username)
@@ -58,26 +83,30 @@ class RepositoryUser:
             remark = 'Database Crud Error'
             self.logger.error(str(e))
             raise Exception(remark)
-
-    async def create_user(self, req_payload:RequestDaftar) -> ResponseDaftarItem:
+        
+    async def select_users(self) -> list[dict]:
         try:
-            query = self.db_model.User.insert().values(
-                username = req_payload.username,
-                hashed_password = utils.get_password_hash(req_payload.password),
-                nama = req_payload.nama,
-                role = req_payload.role,
-                divisi = req_payload.divisi,
-                jabatan = req_payload.jabatan,
-                created_at = crud_utils.current_datetime(),
-                updated_at = None,
-                is_deleted = False
+            query = self.db_model.User.select().with_only_columns(
+                [
+                    self.db_model.User.c.username,
+                    self.db_model.User.c.nama,
+                    self.db_model.User.c.role,
+                    self.db_model.User.c.divisi,
+                    self.db_model.User.c.jabatan,
+                    self.db_model.User.c.created_at,
+                    self.db_model.User.c.is_deleted,
+                ]
             )
-            await self.database.execute(query)
-            return ResponseDaftarItem(
-                success = True
-            )
+            user_list = await self.database.fetch_all(query)
+            user_dicts = []
+            for row in user_list:
+                user_dict = dict(row)
+                user_dict['created_at'] = user_dict['created_at'].strftime("%Y-%m-%d %H:%M:%S.%f")
+                user_dicts.append(user_dict)
+            return user_dicts
         except Exception as e:
             remark = 'Database Crud Error'
             self.logger.error(str(e))
             raise Exception(remark)
+
 
