@@ -30,8 +30,8 @@ class ResponseDaftar(BaseModel):
     resp_msg: StrictStr
     resp_data: None
 
-class RequestUser(BaseModel):
-    username: str
+# class RequestUser(BaseModel):
+#     username: str
 
 class ResponseUserItem(BaseModel):
     username: Optional[str]
