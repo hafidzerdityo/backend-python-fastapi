@@ -1,11 +1,13 @@
 from fastapi import APIRouter, status, Depends
 from fastapi.responses import JSONResponse
+import json
+
 import api.schemas.user_management as schemas
 import services.user_management as services_user
 import services.utils as utils
 from repositories.postgres.config.database_config import database
 import repositories.postgres.config.db_model as db_model
-import json
+from utils.custom_exception import handle_exception, DataExist, InvalidPassword
 
 from log.log import logger
 
@@ -22,14 +24,12 @@ async def create_user(request_payload: schemas.RequestDaftar) -> schemas.Respons
             resp_msg = "Pendaftaran Berhasil",
             resp_data = None
         ) 
+    except DataExist as e:
+        return handle_exception(logger, status.HTTP_500_INTERNAL_SERVER_ERROR, str(e))
+    except InvalidPassword as e:
+        return handle_exception(logger, status.HTTP_400_BAD_REQUEST, str(e))
     except Exception as e:
-        logger.error(str(e)) 
-        return JSONResponse(
-            status_code= status.HTTP_400_BAD_REQUEST,
-            content={"resp_msg": str(e),
-                     "resp_data":  None
-                     },
-        )
+        return handle_exception(logger, status.HTTP_500_INTERNAL_SERVER_ERROR, str(e))
     
 @router.get('/user', tags=["User Management"], status_code=status.HTTP_200_OK, response_model=schemas.ResponseUser)
 async def get_user(token: str = Depends(utils.oauth2_scheme)) -> schemas.ResponseUser:

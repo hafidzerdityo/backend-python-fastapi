@@ -1,7 +1,7 @@
-from api.schemas.user_management import RequestDaftar, ResponseDaftarItem, RequestUser, ResponseUserItem
 import services.utils as utils
 from jose import jwt
 from repositories.postgres.crud.user_management import RepositoryUser
+from utils.custom_exception import DataExist, InvalidPassword
 
 class UserService:
     def __init__(self, repo, database, logger):
@@ -13,9 +13,9 @@ class UserService:
         async with self.database.transaction():
             user_exist = await self.repo.get_user(req_payload.get('username'))
             if user_exist:
-                raise Exception("Username is already exist")
+                raise DataExist("Username is already exist")
             if not utils.validate_password(req_payload.get('password')):
-                raise Exception("Password should have a minimum of 6 digits and must include at least 1 symbol, 1 number, and 1 uppercase letter")
+                raise InvalidPassword("Password should have a minimum of 6 digits and must include at least 1 symbol, 1 number, and 1 uppercase letter")
 
             get_rekening = await self.repo.create_user(req_payload=req_payload)
             
