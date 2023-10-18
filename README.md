@@ -44,7 +44,7 @@ A really simple backend template built with FastAPI, designed to jumpstart your 
      POSTGRES_PASSWORD=default15p
      POSTGRES_HOST=postgres_rest_template
      POSTGRES_PORT=8003
-     POSTGRES_DB=rest_template_python
+     POSTGRES_DB=rest_template
      ```
 
    Feel free to change the values in the `.env` files based on your needs.
