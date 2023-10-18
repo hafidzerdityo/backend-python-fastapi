@@ -49,7 +49,7 @@ A really simple backend template built with FastAPI, designed to jumpstart your 
 
    Feel free to change the values in the `.env` files based on your needs.
 
-3. On the root directory, run the following command to start the development server along with the database:
+3. On the root directory, run the following command to start the development server along with the database. Make sure you have docker installed:
    ```bash
    docker-compose up
    ```
