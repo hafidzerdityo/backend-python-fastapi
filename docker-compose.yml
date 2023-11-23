@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  eunoiaws:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: eunoia_i:latest
+    container_name: eunoia_c
+    ports:
+      - "8004:8004"
+    volumes:
+      - ./app:/code
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - postgres_eunoia
+
+  postgres_eunoia:
+    image: postgres:latest
+    container_name: pg_eunoia_c
+    restart: always
+    env_file:
+      - ./app/config.env
+    ports:
+      - "8003:8003"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    command: postgres -c listen_addresses='*' -c port=8003
+
+volumes:
+  postgres_data:
