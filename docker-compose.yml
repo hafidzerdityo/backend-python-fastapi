@@ -1,12 +1,12 @@
 version: "3"
 
 services:
-  eunoiaws:
+  korteksaiws:
     build:
       context: .
       dockerfile: Dockerfile
-    image: eunoia_i:latest
-    container_name: eunoia_c
+    image: korteksai_i:latest
+    container_name: korteksai_c
     ports:
       - "8004:8004"
     volumes:
@@ -14,11 +14,11 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
     depends_on:
-      - postgres_eunoia
+      - postgres_korteksai
 
-  postgres_eunoia:
+  postgres_korteksai:
     image: postgres:latest
-    container_name: pg_eunoia_c
+    container_name: pg_korteksai_c
     restart: always
     env_file:
       - ./app/config.env
