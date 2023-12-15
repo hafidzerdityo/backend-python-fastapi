@@ -23,7 +23,7 @@ WORKERS = os.environ.get('SERVICE_WORKERS')
 
 
 
-app = FastAPI(title="DeepFlow Core API",
+app = FastAPI(title="Eunoia Core API",
     description="author: Muhammad Hafidz Erdityo",
     version="0.0.1",
     terms_of_service=None,
